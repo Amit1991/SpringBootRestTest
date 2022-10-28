@@ -36,4 +36,18 @@ class SpringBootRestTestApplicationTests {
 				}
 			});
 	}
+	
+	@Test
+	public void testFirstApiCall() throws Exception {
+		
+		this.mockMvc.perform(get("/first/comeGetMe")).andExpect(status().is(HttpStatus.OK.value()))
+			.andDo(new ResultHandler() {
+				
+				@Override
+				public void handle(MvcResult result) throws Exception {
+					
+					System.out.println(result.getResponse().getContentAsString());
+				}
+			});
+	}
 }
