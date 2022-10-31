@@ -3,7 +3,6 @@ package com.learning.bootRestTest.model;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,7 +33,7 @@ public class Country extends BaseModel {
 	@Enumerated(EnumType.STRING)
 	private Continent continent;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Language> languages;
 
 	public long getIsdCode() {

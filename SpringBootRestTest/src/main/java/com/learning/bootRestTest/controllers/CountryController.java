@@ -24,7 +24,7 @@ public class CountryController {
 	public List<Country> getAll() {
 		
 		List<Country> countries = countryService.getAll();
-		countries.stream().forEach(a -> a.setLanguages(null));
+		//countries.stream().forEach(a -> a.setLanguages(null));
 		return countries;
 	}
 	
