@@ -1,11 +1,17 @@
 package com.learning.bootRestTest.model;
 
 import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
 @Entity
 public class Country extends BaseModel {
@@ -22,11 +28,13 @@ public class Country extends BaseModel {
 	private String pinPattern;
 	private String pinExample;
 	private String zone;
+	private String continentName;
 
+	@Transient
 	@Enumerated(EnumType.STRING)
 	private Continent continent;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Language> languages;
 
 	public long getIsdCode() {
@@ -140,5 +148,43 @@ public class Country extends BaseModel {
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
 	}
+	
+	public String getContinentName() {
+		return continentName;
+	}
 
+	public void setContinentName(String continentName) {
+		this.continentName = continentName;
+	}
+
+	@Override
+	public String toString() {
+		return "Country [" + (countryName != null ? "countryName=" + countryName + ", " : "") + "isdCode=" + isdCode
+				+ ", " + (countryCode != null ? "countryCode=" + countryCode + ", " : "")
+				+ (phoneNumberPattern != null ? "phoneNumberPattern=" + phoneNumberPattern + ", " : "")
+				+ (phoneNumberExample != null ? "phoneNumberExample=" + phoneNumberExample + ", " : "")
+				+ (mobileNumberPattern != null ? "mobileNumberPattern=" + mobileNumberPattern + ", " : "")
+				+ (mobileNumberExample != null ? "mobileNumberExample=" + mobileNumberExample + ", " : "")
+				+ (faxNumberPattern != null ? "faxNumberPattern=" + faxNumberPattern + ", " : "")
+				+ (faxNumberExample != null ? "faxNumberExample=" + faxNumberExample + ", " : "")
+				+ (pinPattern != null ? "pinPattern=" + pinPattern + ", " : "")
+				+ (pinExample != null ? "pinExample=" + pinExample + ", " : "")
+				+ (zone != null ? "zone=" + zone + ", " : "")
+				+ (continent != null ? "continent=" + continent + ", " : "")
+				+ (continentName != null ? "continentName=" + continentName + ", " : "")
+				+ (languages != null ? "languages=" + languages : "") + "]";
+	}
+
+	@PrePersist
+	void setEnumVal()
+	{
+		Optional<String> cName = Optional.ofNullable(this.getContinentName());
+		this.continentName = cName.orElse(Continent.Unspecified.toString());
+	}
+	
+	@PostLoad
+	void resetEnumVal()
+	{
+		this.continent = Continent.of(this.continentName);
+	}
 }
