@@ -1,6 +1,5 @@
 package com.learning.bootRestTest.controllers;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +42,20 @@ public class LanguageController {
 	}
 	
 	@PutMapping("/updateOne/{id}")
-	public ResponseEntity<Language> updateOne(@PathVariable("id") long id, @RequestBody Language lang)
+	public ResponseEntity<?> updateOne(@PathVariable("id") long id, @RequestBody Language lang)
 	{
 		log.info("Updating one language");
-		return new ResponseEntity<Language>(languageService.updateOne(id, lang), HttpStatus.OK);
+		try
+		{
+			lang = languageService.updateOne(id, lang);
+			return new ResponseEntity<Language>(lang, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		
+		
 	}
 	
 	@GetMapping("/populate")
