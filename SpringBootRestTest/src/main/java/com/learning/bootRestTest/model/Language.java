@@ -1,62 +1,24 @@
 package com.learning.bootRestTest.model;
 
-import java.util.Date;
 import java.util.Optional;
 
 import javax.persistence.Entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
+@Getter @Setter @ToString 
+@NoArgsConstructor @AllArgsConstructor()
 public class Language extends BaseModel {
 
 	private String languageName;
 	private String primaryScriptName;
 	private String languageCode;
 	private String sampleSentence;
-
-	public String getLanguageName() {
-		return languageName;
-	}
-
-	public void setLanguageName(String languageName) {
-		this.languageName = languageName;
-	}
-
-	public String getPrimaryScriptName() {
-		return primaryScriptName;
-	}
-
-	public void setPrimaryScriptName(String primaryScriptName) {
-		this.primaryScriptName = primaryScriptName;
-	}
-
-	public String getLanguageCode() {
-		return languageCode;
-	}
-
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
-	}
-
-	public String getSampleSentence() {
-		return sampleSentence;
-	}
-
-	public void setSampleSentence(String sampleSentence) {
-		this.sampleSentence = sampleSentence;
-	}
-
-	public Language() {
-		
-	}
-	
-	public Language(String languageName, String primaryScriptName, String languageCode, String sampleSentence) 
-	{
-		this.languageName = languageName;
-		this.primaryScriptName = primaryScriptName;
-		this.languageCode = languageCode;
-		this.sampleSentence = sampleSentence;
-		this.setCreatedOn(new Date());
-	}
 
 	public static Language copyTo(Language existingLang, Language lang) {
 		

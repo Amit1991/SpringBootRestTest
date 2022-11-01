@@ -3,6 +3,13 @@ package com.learning.bootRestTest.model;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor 
+@AllArgsConstructor
 public enum Continent {
 
 	Asia("Asia"),
@@ -13,24 +20,8 @@ public enum Continent {
 	Antarctica("Antarctica"),
 	Unspecified("Unspecified");
 	
+	@Getter @Setter
 	private String continentName;
-	
-	public String getContinentName() {
-		return continentName;
-	}
-
-	public void setContinentName(String continentName) {
-		this.continentName = continentName;
-	}
-	
-	private Continent() {
-		
-	}
-	
-	private Continent(String continentName)
-    {
-        this.continentName = continentName;
-    }
 	
 	public static Continent of(String name) {
 		

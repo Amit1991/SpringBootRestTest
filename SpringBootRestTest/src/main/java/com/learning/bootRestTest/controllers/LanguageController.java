@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learning.bootRestTest.model.Language;
 import com.learning.bootRestTest.service.LanguageService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/language")
+@Slf4j
 public class LanguageController {
 
 	@Autowired
@@ -24,12 +27,15 @@ public class LanguageController {
 	@GetMapping("/getAll")
 	public List<Language> getAllLanguages() {
 		
+		log.info("Finding all languages...");
 		return languageService.getAllLanguages();
 	}
 	
 	@PostMapping("/addOne")
 	public long addOne(@RequestBody Language lang)
 	{
+		log.info("Adding one language");
+		
 		if(lang.getId() > 0)
 		{
 			return languageService.updateOne(lang.getId(), null, lang);
