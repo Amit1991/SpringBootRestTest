@@ -1,12 +1,15 @@
 package com.learning.bootRestTest.controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,35 +35,34 @@ public class LanguageController {
 	}
 	
 	@PostMapping("/addOne")
-	public long addOne(@RequestBody Language lang)
+	public ResponseEntity<Language> addOne(@RequestBody Language lang)
 	{
 		log.info("Adding one language");
 		
-		if(lang.getId() > 0)
-		{
-			return languageService.updateOne(lang.getId(), null, lang);
-		}
-		else 
-		{
-			lang.setCreatedOn(new Date());
-			return languageService.saveOne(lang);
-		}
+		return new ResponseEntity<Language>(languageService.saveOne(lang), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("populate")
-	public List<Long> populateData() {
+	@PutMapping("/updateOne/{id}")
+	public ResponseEntity<Language> updateOne(@PathVariable("id") long id, @RequestBody Language lang)
+	{
+		log.info("Updating one language");
+		return new ResponseEntity<Language>(languageService.updateOne(id, lang), HttpStatus.OK);
+	}
+	
+	@GetMapping("/populate")
+	public HttpStatus populateData() {
 		
-		List<Long> data = new ArrayList<>();
 		List<Language> existingData = getAllLanguages();
 		
 		if(existingData != null && existingData.size() > 0)
 		{
 			languageService.deleteAll();
+			existingData.clear();
 		}
 		
-		data.add(languageService.saveOne(new Language("Hindi", "Devnagri", "hi", "यह एक उदाहरण वाक्य है.")));
-		data.add(languageService.saveOne(new Language("English", "Roman", "en", "This is a sample sentence.")));
+		existingData.add(languageService.saveOne(new Language("Hindi", "Devnagri", "hi", "यह एक उदाहरण वाक्य है.")));
+		existingData.add(languageService.saveOne(new Language("English", "Roman", "en", "This is a sample sentence.")));
 		
-		return data;
+		return HttpStatus.IM_USED;
 	}
 }

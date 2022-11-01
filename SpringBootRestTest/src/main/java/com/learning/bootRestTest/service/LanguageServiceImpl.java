@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import com.learning.bootRestTest.exception.ResourceNotFoundException;
 import com.learning.bootRestTest.model.Language;
 import com.learning.bootRestTest.repoistory.LanguageRepo;
 
@@ -36,9 +37,10 @@ public class LanguageServiceImpl implements LanguageService {
 	}
 
 	@Override
-	public long saveOne(Language language) {
+	public Language saveOne(Language language) {
 		
-		return languageRepo.save(language).getId();
+		language.setCreatedOn(new Date());
+		return languageRepo.save(language);
 	}
 
 	@Override
@@ -48,23 +50,11 @@ public class LanguageServiceImpl implements LanguageService {
 	}
 
 	@Override
-	public long updateOne(Long id, String langName, Language lang) {
+	public Language updateOne(Long id, Language lang) {
 		
-		Language existingLang = null;
-		
-		if(id == null)
-		{
-			id = getOneLanguage(langName).getId();
-		}
-		else
-		{
-			existingLang = getOneLanguage(id);
-			lang = Language.copyTo(existingLang, lang);
-		}
-		
-		lang.setId(id);
+		Language existingLang = languageRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Language", "Id", id));
+		lang = Language.copyTo(existingLang, lang);
 		lang.setUpdatedOn(new Date());
-		
-		return saveOne(lang);
+		return languageRepo.save(lang);
 	}
 }
